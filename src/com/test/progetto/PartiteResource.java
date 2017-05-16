@@ -80,7 +80,7 @@ public class PartiteResource {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public synchronized Response addGiocatorePartita(@PathParam("nomepartita") String nomePartita, @PathParam("giocatorenome") String giocatorenome, 
-			@PathParam("giocatoreip") String giocatoreip, @PathParam("giocatoreporta")int giocatoreporta){
+			@PathParam("giocatoreip") String giocatoreip, @PathParam("giocatoreporta")long giocatoreporta){
 			//Se la partita esiste proseguiamo
 			if (this.partiteService.getPartita(this.partiteService.indexPartitaPerNome(nomePartita))!=null){
 			//Se non esiste un giocatore con lo stesso nome proseguiamo
@@ -90,8 +90,17 @@ public class PartiteResource {
 						return Response.status(403).entity("Esiste un giocatore con il nome inserito").build();
 					}
 				}
-				this.partiteService.getPartita(this.partiteService.indexPartitaPerNome(nomePartita)).aggiungiGiocatore(new Giocatore(giocatorenome, giocatoreporta, giocatoreip));
-				return Response.status(200).entity("Giocatore aggiunto!").build();
+				//Se la porta del giocatore in questione non è stata già presa da nessun altro allora procediamo
+				for (int i=0;i<giocatori.size();i++){
+					if (giocatori.get(i).getPorta()==giocatoreporta){
+							return Response.status(403).entity("La porta scelta è già in uso nella partita corrente").build();	
+						}
+						
+					}
+				}
+			this.partiteService.getPartita(this.partiteService.indexPartitaPerNome(nomePartita)).aggiungiGiocatore(new Giocatore(giocatorenome, giocatoreporta, giocatoreip));
+			return Response.status(200).entity("Giocatore aggiunto!").build();
+				
 			}else{
 				return Response.status(404).entity("Partita non trovata").build();
 			}

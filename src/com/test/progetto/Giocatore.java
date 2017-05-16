@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Giocatore {
+	//Se seleziono la porta 0 tramite classe serversocket ne verrà associata una a caso liberamente
 	private long id;
 	private String nome;
 	private String indirizzoIP;
