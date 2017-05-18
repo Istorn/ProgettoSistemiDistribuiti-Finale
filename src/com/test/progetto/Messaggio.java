@@ -21,14 +21,16 @@ public class Messaggio {
 	public const MOV:int=2;
 	public const DIE:int=3;
 	public const BOMB:int=4;
-	public const EXPL:int=4;
-	public const WIN:int=5;
+	public const EXPL:int=5;
+	public const WIN:int=6;
 	//Attributo di controllo affinchè si garantisca l'ack del messaggio da parte degli altri peer
 	private int ACK;
 	//Timestamp da associare a ogni messaggio
 	private Date timestamp;
 	//In base al numero impostato nel costruttore, sarà capita la tipologia di messaggio
 	private int tipeMsg;
+	//Nel caso di spostamento o bomba bisogna specificarne i dettagli
+	private int x,y,bombType;
 	//Bisogna impostare in maniera immediata il timestamp
 	public Messaggio(int typeOfMsg){
 		this.ACK=0;
@@ -42,6 +44,42 @@ public class Messaggio {
 			return true;
 		}
 		return false;
+	}
+	
+	//In base alla tipologia di messaggio individutata dal parametro "TypeOfMsg" dobbiamo impostarne gli attributi necessari
+	public Messaggio builderMsg(int x, int y, int bombType){
+		switch(this.tipeMsg){
+			case 0:
+				return this;
+				
+			case 1:
+				return this;
+				
+			case 2:
+				this.x=x;
+				this.y=y;
+				return this;
+			case 2:
+				return this;
+			case 3:
+				
+				return this;
+			case 4:
+				this.bombType=bombType;
+				return this;
+			case 5:
+				return this;
+			case 6:
+				return this;
+			default:
+				return null;
+			
+		}
+	}
+	
+	public void setACK(){
+		this.ACK=1;
+		
 	}
 	
 	
